@@ -8,5 +8,13 @@ module MUX_3to1(
     output  reg [32-1:0] data_o
 );
 /* Write your code HERE */
-endmodule
 
+always @(*) begin
+    case(select_i) 
+        2'b00: data_o <= data0_i;
+        2'b01: data_o <= data1_i;
+        2'b10: data_o <= data2_i;
+    endcase
+end
+
+endmodule

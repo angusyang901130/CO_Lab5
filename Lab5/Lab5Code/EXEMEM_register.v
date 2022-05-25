@@ -21,4 +21,27 @@ module EXEMEM_register (
 	output reg [31:0] pc_add4_o
 );
 /* Write your code HERE */
+always @(posedge clk_i) begin
+	if (rst_i)
+		instr_o <= 32'b0;
+		WB_o <= 2'b0;
+		Mem_o <= 2'b0;
+		zero_o <= 0;
+		alu_ans_o <= 32'b0;
+		rtdata_o <= 32'b0;
+		WBreg_o <= 4'b0;
+		pc_add4_o <= 32'b0;
+	else
+		instr_o <= instr_i;
+		WB_o <= WB_i;
+		Mem_o <= Mem_i;
+		zero_o <= zero_i;
+		alu_ans_o <= alu_ans_i;
+		rtdata_o <= rtdata_i;
+		WBreg_o <= WBreg_i;
+		pc_add4_o <= pc_add4_i;
+
+
+	
+end
 endmodule

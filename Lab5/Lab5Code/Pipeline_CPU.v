@@ -227,15 +227,15 @@ ForwardingUnit FWUnit(
     .MEMWB_RD(),
     .EXEMEM_RegWrite(),
     .MEMWB_RegWrite(),
-    .ForwardA(),
-    .ForwardB()
+    .ForwardA(ForwardA),
+    .ForwardB(ForwardB)
 );
 
 MUX_3to1 MUX_ALU_src1(
     .data0_i(),
     .data1_i(),
     .data2_i(),
-    .select_i(),
+    .select_i(ForwardA),
     .data_o()
 );
 
@@ -243,18 +243,18 @@ MUX_3to1 MUX_ALU_src2(
     .data0_i(),
     .data1_i(),
     .data2_i(),
-    .select_i(),
+    .select_i(ForwardB),
     .data_o()
 );
 
 ALU_Ctrl ALU_Ctrl(
-    instr(),
+    .instr(),
     .ALUOp(),
     .ALU_Ctrl_o()
 );
 
 alu alu(
-    rst_n(rst_i),
+    .rst_n(rst_i),
     .src1(),
     .src2(),
     .ALU_control(),
@@ -263,7 +263,7 @@ alu alu(
 );
 
 EXEMEM_register EXEtoMEM(
-    clk_i(clk_i),
+    .clk_i(clk_i),
 	.rst_i(),
 	.instr_i(),
 	.WB_i(),
@@ -285,7 +285,7 @@ EXEMEM_register EXEtoMEM(
 
 // MEM
 Data_Memory Data_Memory(
-    .clk_i(),
+    .clk_i(clk_i),
     .addr_i(),
     .data_i(),
     .MemRead_i(),
@@ -294,7 +294,7 @@ Data_Memory Data_Memory(
 );
 
 MEMWB_register MEMtoWB(
-    .clk_i(),
+    .clk_i(clk_i),
     .rst_i(),
     .WB_i(),
     .DM_i(),

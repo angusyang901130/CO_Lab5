@@ -9,8 +9,8 @@ input         clk_i;
 input         rst_i;
 
 //Internal Signals
-wire [31:0] PC_i;
-wire [31:0] PC_o;
+wire [31:0] PC_i; // input in IF, output in IF
+wire [31:0] PC_o; // input in IF, output in IF, input in IF/ID
 wire [31:0] MUXMemtoReg_o;
 wire [31:0] ALUResult;
 wire [31:0] MUXALUSrc_o;
@@ -22,9 +22,9 @@ wire [31:0] ALUSrc1_o;
 wire [31:0] ALUSrc2_o;
 wire [7:0]  MUX_control_o;
 
-wire [31:0] PC_Add_Immediate;
+wire [31:0] PC_Add_Immediate; // input in IF
 wire [1:0] ALUOp;
-wire PC_write;
+wire PC_write; // input in IF
 wire ALUSrc;
 wire RegWrite;
 wire Branch;
@@ -34,12 +34,12 @@ wire [31:0] SL1_o;
 wire [3:0] ALU_Ctrl_o;
 wire ALU_zero;
 wire Branch_zero;
-wire MUXPCSrc;
+wire MUXPCSrc; // input in IF
 wire [31:0] DM_o;
 wire MemtoReg, MemRead, MemWrite;
 wire [1:0] ForwardA;
 wire [1:0] ForwardB;
-wire [31:0] PC_Add4;
+wire [31:0] PC_Add4;  // input in IF
 
 
 //Pipeline Register Signals
@@ -47,7 +47,7 @@ wire [31:0] PC_Add4;
 wire [31:0] IFID_PC_o;
 wire [31:0] IFID_Instr_o;
 wire IFID_Write;
-wire IFID_Flush;
+wire IFID_Flush; 
 wire [31:0]IFID_PC_Add4_o;
 
 //IDEXE
@@ -81,28 +81,57 @@ wire [31:0] MEMWB_ALUresult_o;
 wire [4:0]  MEMWB_Instr_11_7_o;
 wire [31:0] MEMWB_PC_Add4_o;
 
+// wire
+wire [31:0] imm_4 = 4; // input in IF
+wire [31:0] instr; // output in IF, input 
 
-// IF
+// IF 
 MUX_2to1 MUX_PCSrc(
+    .data0_i(PC_Add4),
+    .data1_i(PC_Add_Immediate),
+    .select_i(MUXPCSrc),
+    .data_o(PC_i)
 );
 
 ProgramCounter PC(
+    .clk_i(clk_i),
+    .rst_i(rst_i),
+    .PCwrite(PC_write),
+    .pc_i(PC_i),
+    .pc_o(PC_o)
 );
 
 Adder PC_plus_4_Adder(
+    .src1_i(PC_o),
+    .src2_i(imm_4),
+    .sum_o(PC_Add4)
 );
 
 Instr_Memory IM(
+    .addr_i(PC_o),
+    .instr_o(instr)
 );
 
 IFID_register IFtoID(
+    .clk_i(clk_i),
+    .rst_i(rst_i),
+    .flush(IFID_Flush),
+    .IFID_write(IFID_Write),
+    .address_i(PC_o),
+    .instr_i(instr),
+    .pc_add4_i(PC_Add4),
+    .address_o(IFID_PC_o),
+    .instr_o(IFID_Instr_o),
+    .pc_add4_o(IFID_PC_Add4_o)
 );
 
 // ID
 Hazard_detection Hazard_detection_obj(
+
 );
 
 MUX_2to1 MUX_control(
+    
 );
 
 Decoder Decoder(

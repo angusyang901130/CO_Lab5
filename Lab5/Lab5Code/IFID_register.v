@@ -28,7 +28,7 @@ always @(posedge clk_i) begin
         pc_add4_o <= 32'b0;
     end
     
-    else if(IFID_write) begin
+    else if(!IFID_write) begin
         address_o <= address_o;
         instr_o <= instr_o;
         pc_add4_o <= pc_add4_o;

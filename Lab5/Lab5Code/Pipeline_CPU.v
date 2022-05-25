@@ -125,35 +125,107 @@ IDEXE_register IDtoEXE(
 
 // EXE
 MUX_2to1 MUX_ALUSrc(
+    .data0_i(),
+    .data1_i(),
+    .select_i(),
+    .data_o()
 );
 
 ForwardingUnit FWUnit(
+    .IDEXE_RS1(),
+    .IDEXE_RS2(),
+    .EXEMEM_RD(),
+    .MEMWB_RD(),
+    .EXEMEM_RegWrite(),
+    .MEMWB_RegWrite(),
+    .ForwardA(),
+    .ForwardB()
 );
 
 MUX_3to1 MUX_ALU_src1(
+    .data0_i(),
+    .data1_i(),
+    .data2_i(),
+    .select_i(),
+    .data_o()
 );
 
 MUX_3to1 MUX_ALU_src2(
+    .data0_i(),
+    .data1_i(),
+    .data2_i(),
+    .select_i(),
+    .data_o()
 );
 
 ALU_Ctrl ALU_Ctrl(
+    instr(),
+    .ALUOp(),
+    .ALU_Ctrl_o()
 );
 
 alu alu(
+    rst_n(rst_i),
+    .src1(),
+    .src2(),
+    .ALU_control(),
+    .result(),
+    .Zero()
 );
 
 EXEMEM_register EXEtoMEM(
+    clk_i(clk_i),
+	.rst_i(),
+	.instr_i(),
+	.WB_i(),
+	.Mem_i(),
+	.zero_i(),
+	.alu_ans_i(),
+	.rtdata_i(),
+	.WBreg_i(),
+	.pc_add4_i(),
+	.instr_o(),
+	.WB_o(),
+	.Mem_o(),
+	.zero_o(),
+	.alu_ans_o(),
+	.rtdata_o(),
+	.WBreg_o(),
+	.pc_add4_o()
 );
 
 // MEM
 Data_Memory Data_Memory(
+    .clk_i(),
+    .addr_i(),
+    .data_i(),
+    .MemRead_i(),
+    .MemWrite_i(),
+    .data_o()
 );
 
 MEMWB_register MEMtoWB(
+    .clk_i(),
+    .rst_i(),
+    .WB_i(),
+    .DM_i(),
+    .alu_ans_i(),
+    .WBreg_i(),
+    .pc_add4_i(),
+    .WB_o(),
+    .DM_o(),
+    .alu_ans_o(),
+    .WBreg_o(),
+    .pc_add4_o()
 );
 
 // WB
 MUX_3to1 MUX_MemtoReg(
+    .data0_i(),
+    .data1_i(),
+    .data2_i(),
+    .select_i(),
+    .data_o()
 );
 
 endmodule

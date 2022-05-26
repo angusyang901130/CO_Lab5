@@ -183,8 +183,8 @@ Imm_Gen ImmGen(
 );
 
 Shift_Left_1 SL1(
-    data_i(Imm_Gen_o),
-    data_o(SL1_o)
+    .data_i(Imm_Gen_o),
+    .data_o(SL1_o)
 );
 
 Adder Branch_Adder(
@@ -204,7 +204,7 @@ IDEXE_register IDtoEXE(
     .data2_i(RTdata_o),
     .immgen_i(Imm_Gen_o),
     .alu_ctrl_instr({IFID_Instr_o[30], IFID_Instr_o[14:12]}),
-    .WBreg_i(IFID_Instr[11:7]),
+    .WBreg_i(IFID_Instr_o[11:7]),
     .pc_add4_i(IFID_PC_Add4_o),
     .instr_o(IDEXE_Instr_o),
     .WB_o(IDEXE_WB_o),

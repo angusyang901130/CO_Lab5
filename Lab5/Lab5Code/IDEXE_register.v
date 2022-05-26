@@ -40,7 +40,7 @@ always @(posedge clk_i) begin
         pc_add4_o <= 32'b0; 
     end
 
-    else if(IFID_write) begin
+    else begin
         instr_o <= instr_i;
         WB_o <= WB_i;
         Mem_o <= Mem_i;

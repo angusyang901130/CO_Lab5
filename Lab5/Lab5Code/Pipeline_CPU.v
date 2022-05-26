@@ -95,10 +95,6 @@ assign MUX_control_8bit_o = MUX_control_o;
 assign Branch_zero = (RSdata_o - RTdata_o == 0);
 assign MUXPCSrc = (Branch & Branch_zero) | Jump;
 
-always @(*) begin
-    $display("instr=%b", instr);
-end
-
 
 // IF 
 MUX_2to1 MUX_PCSrc(
@@ -281,7 +277,7 @@ EXEMEM_register EXEtoMEM(
 	.Mem_i(IDEXE_Mem_o),
 	.zero_i(ALU_zero),
 	.alu_ans_i(ALUResult),
-	.rtdata_i(ALUSrc2_o),
+	.rtdata_i(IDEXE_RTdata_o),
 	.WBreg_i(IDEXE_Instr_11_7_o),
 	.pc_add4_i(IDEXE_PC_add4_o),
 	.instr_o(EXEMEM_Instr_o),

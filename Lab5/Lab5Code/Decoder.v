@@ -8,7 +8,7 @@ module Decoder(
     output reg [2-1:0]  ALUOp,
     output reg          MemRead,
     output reg          MemWrite,
-    output reg          MemtoReg,
+    output reg [2-1:0]  MemtoReg,
     output reg          Jump
 );
 
@@ -32,17 +32,27 @@ parameter [7-1:0] branch = 7'b1100011;
 parameter [7-1:0] jal =    7'b1101111;
 parameter [7-1:0] jalr =   7'b1100111;
 
-assign Ctrl_o[9] = (instr_i == Rtype) || (instr_i == Itype) || (instr_i == load) || (instr_i == jal) || (instr_i == jalr); // RegWrite
-assign Ctrl_o[8] = (instr_i == branch); // branch
-assign Ctrl_o[7] = (instr_i == jal) || (instr_i == jalr); // jump
-assign Ctrl_o[6] = (instr_i == load); // memtoreg
-assign Ctrl_o[5] = (instr_i == load); // memread
-assign Ctrl_o[4] = (instr_i == store); // memwrite
-//assign Ctrl_o[3] //
-assign Ctrl_o[2] = (instr_i == Itype) || (instr_i == load) || (instr_i == store); // ALUSrc
-assign Ctrl_o[1] = (instr_i == Rtype) || (instr_i == Itype); // ALUOp[1]
-assign Ctrl_o[0] = (instr_i == Itype) || (instr_i == branch); // ALUOp[0]
+assign Ctrl_o[9] = (opcode == branch); // branch
+assign Ctrl_o[8] = (opcode == jal) || (opcode == jalr); // jump
+assign Ctrl_o[7] = (opcode == Rtype) || (opcode == Itype) || (opcode == load) || (opcode == jal) || (opcode == jalr); // RegWrite
+assign Ctrl_o[6] = (opcode == jal) || (opcode == jalr); // memtoreg[1]
+assign Ctrl_o[5] = (opcode == load); // memtoreg[0]
+assign Ctrl_o[4] = (opcode == load); // memread
+assign Ctrl_o[3] = (opcode == store); // memwrite
+assign Ctrl_o[2] = (opcode == Itype) || (opcode == load) || (opcode == store); // ALUSrc
+assign Ctrl_o[1] = (opcode == Rtype) || (opcode == Itype); // ALUOp[1]
+assign Ctrl_o[0] = (opcode == Itype) || (opcode == branch); // ALUOp[0]
 
+always @(*) begin
+    Branch <= Ctrl_o[9];
+    Jump <= Ctrl_o[8];
+    RegWrite <= Ctrl_o[7];
+    MemtoReg <= Ctrl_o[6:5];
+    MemRead <= Ctrl_o[4];
+    MemWrite <= Ctrl_o[3];
+    ALUSrc <= Ctrl_o[2];
+    ALUOp <= Ctrl_o[1:0];
+end
 
 endmodule
 

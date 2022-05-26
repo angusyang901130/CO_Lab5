@@ -9,5 +9,18 @@ module Hazard_detection(
     output reg control_output_select
 );
 /* Write your code HERE */
+always @(*) begin
+    if (IDEXE_memRead & (IDEXE_regRd == IFID_regRs | IDEXE_regRd == IFID_regRt)) begin
+        PC_write <= 0;
+        IFID_write <= 0;
+        control_output_select <= 0;
+    end
+    else begin
+        PC_write <= 1;
+        IFID_write <= 1;
+        control_output_select <= 1;
+    end
+end
+
 endmodule
 

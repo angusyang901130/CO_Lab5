@@ -25,4 +25,32 @@ module IDEXE_register (
     output reg [31:0] pc_add4_o
 );
 /* Write your code HERE */
+always @(posedge clk_i) begin
+
+    if(~rst_i) begin
+        instr_o <= 32'b0;
+        WB_o <= 32'b0;
+        Mem_o <= 32'b0;
+        Exe_o <= 32'b0;
+        data1_o <= 32'b0;
+        data2_o <= 32'b0;
+        immgen_o <= 32'b0;
+        alu_ctrl_input <= 32'b0;
+        WBreg_o <= 32'b0;
+        pc_add4_o <= 32'b0; 
+    end
+
+    else begin
+        instr_o <= instr_i;
+        WB_o <= WB_i;
+        Mem_o <= Mem_i;
+        Exe_o <= Exe_i;
+        data1_o <= data1_i;
+        data2_o <= data2_i;
+        immgen_o <= immgen_i;
+        alu_ctrl_input <= alu_ctrl_instr;
+        WBreg_o <= WBreg_i;
+        pc_add4_o <= pc_add4_i; 
+    end
+end
 endmodule

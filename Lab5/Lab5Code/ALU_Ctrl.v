@@ -24,7 +24,14 @@ always @(*) begin
                     4'b1101: ALU_Ctrl_o <= 4'b1110; // sra
                 endcase
             end
-        2'b11: ALU_Ctrl_o <= 4'b0010;
+        2'b11:
+            begin
+                case(instr[2:0])
+                    3'b000: ALU_Ctrl_o <= 4'b0010; // addi
+                    3'b010: ALU_Ctrl_o <= 4'b0111; // slti
+                    3'b001: ALU_Ctrl_o <= 4'b1101; // slli
+                endcase
+            end 
     endcase
 end
 

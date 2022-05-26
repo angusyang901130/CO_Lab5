@@ -24,7 +24,7 @@ always @(*) begin
                     4'b1101: ALU_Ctrl_o <= 4'b1110; // sra
                 endcase
             end
-        2'b11: alu_ctrl_reg <= 4'b0010;
+        2'b11: ALU_Ctrl_o <= 4'b0010;
     endcase
 end
 

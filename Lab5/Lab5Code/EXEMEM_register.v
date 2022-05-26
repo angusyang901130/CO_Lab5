@@ -4,7 +4,7 @@ module EXEMEM_register (
 	input rst_i,
 	input [31:0] instr_i,
 	input [2:0] WB_i,
-	input [2:0] Mem_i,
+	input [1:0] Mem_i,
 	input zero_i,
 	input [31:0] alu_ans_i,
 	input [31:0] rtdata_i,
@@ -13,7 +13,7 @@ module EXEMEM_register (
 
 	output reg [31:0] instr_o,
 	output reg [2:0] WB_o,
-	output reg [2:0] Mem_o,
+	output reg [1:0] Mem_o,
 	output reg zero_o,
 	output reg [31:0] alu_ans_o,
 	output reg [31:0] rtdata_o,
@@ -22,7 +22,7 @@ module EXEMEM_register (
 );
 /* Write your code HERE */
 always @(posedge clk_i) begin
-	if (rst_i)
+	if (rst_i) begin
 		instr_o <= 32'b0;
 		WB_o <= 2'b0;
 		Mem_o <= 2'b0;
@@ -31,7 +31,8 @@ always @(posedge clk_i) begin
 		rtdata_o <= 32'b0;
 		WBreg_o <= 4'b0;
 		pc_add4_o <= 32'b0;
-	else
+	end
+	else begin
 		instr_o <= instr_i;
 		WB_o <= WB_i;
 		Mem_o <= Mem_i;
@@ -40,7 +41,7 @@ always @(posedge clk_i) begin
 		rtdata_o <= rtdata_i;
 		WBreg_o <= WBreg_i;
 		pc_add4_o <= pc_add4_i;
-
+	end
 
 	
 end

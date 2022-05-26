@@ -36,7 +36,7 @@ wire ALU_zero;                  // output in EXE, input in EXE
 wire Branch_zero;
 wire MUXPCSrc;                  // input in IF
 wire [31:0] DM_o;               // output in MEM, input in MEM
-wire MemtoReg;                  // output in ID, 
+wire [1:0] MemtoReg;                  // output in ID, 
 wire MemRead;                   // output in ID, input in ID
 wire MemWrite;                  // output in ID, 
 wire [1:0] ForwardA;            // output in EXE, input in EXE
@@ -90,7 +90,7 @@ wire [31:0] instr;              // output in IF, input in IF/ID
 wire [7:0] MUX_control_8bit_o;
 
 assign Decoder_o = {24'b0, RegWrite, MemtoReg, MemRead, MemWrite, ALUSrc, ALUOp};
-assign IFID_Flush = (BRanch & Branch_zero) | Jump;
+assign IFID_Flush = (Branch & Branch_zero) | Jump;
 assign MUX_control_8bit_o = MUX_control_o;
 assign Branch_zero = (RSdata_o - RTdata_o == 0);
 assign MUXPCSrc = (Branch & Branch_zero) | Jump;
@@ -106,7 +106,7 @@ MUX_2to1 MUX_PCSrc(
 ProgramCounter PC(
     .clk_i(clk_i),
     .rst_i(rst_i),
-    .PCwrite(PC_write),
+    .PCWrite(PC_write),
     .pc_i(PC_i),
     .pc_o(PC_o)
 );
@@ -227,8 +227,8 @@ MUX_2to1 MUX_ALUSrc(
 );
 
 ForwardingUnit FWUnit(
-    .IDEXE_RS1(IDEXE_RSdata_o),
-    .IDEXE_RS2(IDEXE_RTdata_o),
+    .IDEXE_RS1(IDEXE_Instr_o[19:15]),
+    .IDEXE_RS2(IDEXE_Instr_o[24:20]),
     .EXEMEM_RD(EXEMEM_Instr_11_7_o),
     .MEMWB_RD(MEMWB_Instr_11_7_o),
     .EXEMEM_RegWrite(EXEMEM_WB_o[2]),

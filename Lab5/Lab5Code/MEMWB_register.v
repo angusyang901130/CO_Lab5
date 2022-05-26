@@ -16,17 +16,19 @@ module MEMWB_register (
 );
 /* Write your code HERE */
 always @(posedge clk_i) begin
-    if (rst_i)
+    if (rst_i) begin
         WB_o <= 2'b0;
         DM_o <= 32'b0;
         alu_ans_o <= 32'b0;
         WBreg_o <= 2'b0;
         pc_add4_o <= 32'b0;
-    else
+    end
+    else begin
         WB_o <= WB_i;
         DM_o <= DM_i;
         alu_ans_o <= alu_ans_i;
         WBreg_o <= WBreg_i;
         pc_add4_o <= pc_add4_i;
+    end
 end
 endmodule

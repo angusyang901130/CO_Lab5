@@ -48,7 +48,7 @@ always @(posedge clk_i) begin
         data1_o <= data1_i;
         data2_o <= data2_i;
         immgen_o <= immgen_i;
-        alu_ctrl_input <= alu_ctrl_input;
+        alu_ctrl_input <= alu_ctrl_instr;
         WBreg_o <= WBreg_i;
         pc_add4_o <= pc_add4_i; 
     end

@@ -159,7 +159,7 @@ MUX_2to1 MUX_control(
 );
 
 Decoder Decoder(
-    .instr_i(instr),
+    .instr_i(IFID_Instr_o),
     .Branch(Branch),
     .ALUSrc(ALUSrc),
     .RegWrite(RegWrite),

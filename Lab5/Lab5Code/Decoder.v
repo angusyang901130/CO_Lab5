@@ -35,7 +35,7 @@ parameter [7-1:0] jalr =   7'b1100111;
 assign Ctrl_o[9] = (opcode == branch); // branch
 assign Ctrl_o[8] = (opcode == jal) || (opcode == jalr); // jump
 assign Ctrl_o[7] = (opcode == Rtype) || (opcode == Itype) || (opcode == load) || (opcode == jal) || (opcode == jalr); // RegWrite
-assign Ctrl_o[6] = (instr_i == jal) || (instr_i == jalr); // memtoreg[1]
+assign Ctrl_o[6] = (opcode == jal) || (opcode == jalr); // memtoreg[1]
 assign Ctrl_o[5] = (opcode == load); // memtoreg[0]
 assign Ctrl_o[4] = (opcode == load); // memread
 assign Ctrl_o[3] = (opcode == store); // memwrite

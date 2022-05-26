@@ -23,7 +23,7 @@ always @(posedge clk_i) begin
     end
 
     else if(flush) begin
-        address_o <= address_i;
+        address_o <= 32'b0;
         instr_o <= 32'b0;
         pc_add4_o <= 32'b0;
     end

@@ -79,7 +79,7 @@ wire [31:0] EXEMEM_PC_Add4_o;
 //MEMWB
 wire [2:0] MEMWB_WB_o;
 wire [31:0] MEMWB_DM_o;
-wire [31:0] MEMWB_ALUresult_o;
+wire [31:0] MEMWB_ALUResult_o;
 wire [4:0]  MEMWB_Instr_11_7_o;
 wire [31:0] MEMWB_PC_Add4_o;
 
@@ -94,6 +94,11 @@ assign IFID_Flush = (Branch & Branch_zero) | Jump;
 assign MUX_control_8bit_o = MUX_control_o;
 assign Branch_zero = (RSdata_o - RTdata_o == 0);
 assign MUXPCSrc = (Branch & Branch_zero) | Jump;
+
+always @(*) begin
+    $display("instr=%b", instr);
+end
+
 
 // IF 
 MUX_2to1 MUX_PCSrc(
@@ -137,9 +142,9 @@ IFID_register IFtoID(
 
 // ID
 Hazard_detection Hazard_detection_obj(
-    .IFID_regRs(instr[19:15]),
-    .IFID_regRt(instr[24:20]),
-    .IDEXE_regRd(instr[11:7]),
+    .IFID_regRs(IFID_Instr_o[19:15]),
+    .IFID_regRt(IFID_Instr_o[24:20]),
+    .IDEXE_regRd(IDEXE_Instr_11_7_o),
     .IDEXE_memRead(IDEXE_Mem_o[1]),
     .PC_write(PC_write),
     .IFID_write(IFID_Write),
@@ -168,8 +173,8 @@ Decoder Decoder(
 Reg_File RF(
     .clk_i(clk_i),
     .rst_i(rst_i),
-    .RSaddr_i(instr[19:15]),
-    .RTaddr_i(instr[24:20]),
+    .RSaddr_i(IFID_Instr_o[19:15]),
+    .RTaddr_i(IFID_Instr_o[24:20]),
     .RDaddr_i(MEMWB_Instr_11_7_o),
     .RDdata_i(MUXMemtoReg_o),
     .RegWrite_i(MEMWB_WB_o[2]),
@@ -178,7 +183,7 @@ Reg_File RF(
 );
 
 Imm_Gen ImmGen(
-    .instr_i(instr),
+    .instr_i(IFID_Instr_o),
     .Imm_Gen_o(Imm_Gen_o)
 );
 
@@ -309,14 +314,14 @@ MEMWB_register MEMtoWB(
     .pc_add4_i(EXEMEM_PC_Add4_o),
     .WB_o(MEMWB_WB_o),
     .DM_o(MEMWB_DM_o),
-    .alu_ans_o(MEMWB_ALUresult_o),
+    .alu_ans_o(MEMWB_ALUResult_o),
     .WBreg_o(MEMWB_Instr_11_7_o),
     .pc_add4_o(MEMWB_PC_Add4_o)
 );
 
 // WB
 MUX_3to1 MUX_MemtoReg(
-    .data0_i(MEMWB_ALUresult_o),
+    .data0_i(MEMWB_ALUResult_o),
     .data1_i(MEMWB_DM_o),
     .data2_i(MEMWB_PC_Add4_o),
     .select_i(MEMWB_WB_o[1:0]),

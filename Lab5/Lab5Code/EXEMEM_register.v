@@ -22,7 +22,7 @@ module EXEMEM_register (
 );
 /* Write your code HERE */
 always @(posedge clk_i) begin
-	if (rst_i) begin
+	if (~rst_i) begin
 		instr_o <= 32'b0;
 		WB_o <= 2'b0;
 		Mem_o <= 2'b0;

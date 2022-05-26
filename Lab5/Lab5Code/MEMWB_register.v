@@ -16,7 +16,7 @@ module MEMWB_register (
 );
 /* Write your code HERE */
 always @(posedge clk_i) begin
-    if (rst_i) begin
+    if (~rst_i) begin
         WB_o <= 2'b0;
         DM_o <= 32'b0;
         alu_ans_o <= 32'b0;

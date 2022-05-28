@@ -91,7 +91,7 @@ wire [7:0] MUX_control_8bit_o;
 
 assign Decoder_o = {24'b0, RegWrite, MemtoReg, MemRead, MemWrite, ALUSrc, ALUOp};
 assign IFID_Flush = (Branch & Branch_zero) | Jump;
-assign MUX_control_8bit_o = MUX_control_o;
+assign MUX_control_8bit_o = MUX_control_o[7:0];
 assign Branch_zero = (RSdata_o - RTdata_o == 0);
 assign MUXPCSrc = (Branch & Branch_zero) | Jump;
 
